@@ -27,24 +27,40 @@ function swiperAnimation() {
     var swiper = new Swiper(".mySwiper", {
         slidesPerView: "auto",
         centeredSlides: true,
-        spaceBetween: 100,
+        spaceBetween: 56,
+        grabCursor: true,
+        breakpoints: {
+            0: { spaceBetween: 24 },
+            700: { spaceBetween: 56 }
+        },
     });
 }
 function menuAnimation() {
-
-    var menu = document.querySelector("nav h3")
+    var menu = document.querySelector("nav button")
     var full = document.querySelector("#full-scr")
     var navimg = document.querySelector("nav img")
-    var flag = 0
+    var menuLinks = document.querySelectorAll("#full-div1 a")
+
+    function setMenuOpen(isOpen) {
+        full.classList.toggle("is-open", isOpen)
+        menu.setAttribute("aria-expanded", String(isOpen))
+        menu.textContent = isOpen ? "Close" : "Menu"
+        navimg.style.opacity = isOpen ? 0 : 1
+    }
+
     menu.addEventListener("click", function () {
-        if (flag == 0) {
-            full.style.top = 0
-            navimg.style.opacity = 0
-            flag = 1
-        } else {
-            full.style.top = "-100%"
-            navimg.style.opacity = 1
-            flag = 0
+        setMenuOpen(menu.getAttribute("aria-expanded") !== "true")
+    })
+
+    menuLinks.forEach(function (link) {
+        link.addEventListener("click", function () {
+            setMenuOpen(false)
+        })
+    })
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+            setMenuOpen(false)
         }
     })
 }
